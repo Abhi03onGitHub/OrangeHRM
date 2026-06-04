@@ -1,0 +1,2 @@
+2026-06-03 17:31:57.853 [main] ERROR com.orangehrm.utilities.LoggerManager - This is a Error Message
+2026-06-03 17:31:57.853 [main] FATAL com.orangehrm.utilities.LoggerManager - This is a Fatal Message

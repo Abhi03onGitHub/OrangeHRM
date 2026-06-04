@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="LOG_PATH">logs</Property>
+        <Property name="PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+        </Property>
+    </Properties>
+
+    <Appenders>
+
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${PATTERN}"/>
+        </Console>
+
+        <!-- General File Appender (INFO, DEBUG, WARN, TRACE only) -->
+        <RollingFile name="GeneralFileAppender"
+                     fileName="${LOG_PATH}/application.log"
+                     filePattern="${LOG_PATH}/archive/application-%d{yyyy-MM-dd}-%i.log.gz">
+
+            <PatternLayout pattern="${PATTERN}"/>
+
+            <Filters>
+                <!-- Exclude ERROR and FATAL -->
+                <ThresholdFilter level="ERROR"
+                                 onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+            </Filters>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+        <!-- Error File Appender (ERROR and FATAL only) -->
+        <RollingFile name="ErrorFileAppender"
+                     fileName="${LOG_PATH}/error.log"
+                     filePattern="${LOG_PATH}/archive/error-%d{yyyy-MM-dd}-%i.log.gz">
+
+            <PatternLayout pattern="${PATTERN}"/>
+
+            <ThresholdFilter level="ERROR"
+                             onMatch="ACCEPT"
+                             onMismatch="DENY"/>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!-- Project Logger -->
+        <Logger name="com.orangehrm"
+                level="debug"
+                additivity="false">
+
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="GeneralFileAppender"/>
+            <AppenderRef ref="ErrorFileAppender"/>
+        </Logger>
+
+        <!-- Spring Framework Logger -->
+        <Logger name="org.springframework"
+                level="info"/>
+
+        <!-- Hibernate Logger -->
+        <Logger name="org.hibernate"
+                level="warn"/>
+
+        <!-- Root Logger -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="GeneralFileAppender"/>
+            <AppenderRef ref="ErrorFileAppender"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
