@@ -5,7 +5,7 @@
     <Properties>
         <Property name="LOG_PATH">logs</Property>
         <Property name="PATTERN">
-            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %c{1} - %msg%n
         </Property>
     </Properties>
 

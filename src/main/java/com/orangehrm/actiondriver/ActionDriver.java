@@ -3,6 +3,7 @@ package com.orangehrm.actiondriver;
 import java.time.Duration;
 import java.util.Properties;
 import com.orangehrm.base.BaseClass;
+import com.orangehrm.utilities.LoggerManager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -16,7 +17,7 @@ public class ActionDriver {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	protected static Properties prop;
-	public static final Logger logger = BaseClass.logger;
+	public static final Logger logger = LoggerManager.getLogger(ActionDriver.class);
 
 	public ActionDriver(WebDriver driver) {
 		this.driver = driver;
@@ -27,10 +28,10 @@ public class ActionDriver {
 	
 // Method to Click an Element
 	public void click(By by) {
+		String elementDescription = getElementDescription(by);
 		try {
 			waitForElementToBeClickable(by);
 			driver.findElement(by).click();
-			logger.info("Clicked an element");
 		} catch (Exception e) {
 			System.out.println("Unable to Click the Element: " + e.getMessage());
 			logger.error("Unable to Click element");
@@ -44,7 +45,7 @@ public class ActionDriver {
 			WebElement element = driver.findElement(by);
 			element.clear();
 			element.sendKeys(value);
-			logger.info("Value Entered: "+value);
+			logger.info("Value Entered on: "+getElementDescription(by)+" " +value);
 		} catch (Exception e) {
 			logger.error("Unable to Enter the Text - "+e.getMessage());
 		}
@@ -100,7 +101,7 @@ public class ActionDriver {
 		try {
 			waitForElementToBeVisible(by);
 			boolean isDisplayed = driver.findElement(by).isDisplayed();
-			logger.info("Element is getting displayed");
+			logger.info("Element is getting displayed" +getElementDescription(by));
 			return driver.findElement(by).isDisplayed();
 			
 		} catch (Exception e) {
@@ -143,4 +144,58 @@ public class ActionDriver {
 		}
 
 	}
+	
+// Method to get the Element Description by the Locator
+	public String getElementDescription(By locator) {
+		// Check for the NULL Driver or Locator to avoid NULL Pointer exception
+		if(driver==null)
+			return "driver is Null";
+		if(locator==null)
+			return "Locator is Null";	
+		
+		// Find the element using the Locator
+		WebElement element = driver.findElement(locator);
+		
+			try {
+				//Get Element Description
+				String name = element.getDomAttribute("name");
+				String id = element.getDomAttribute("id");
+				String text = element.getText();	
+				String classname = element.getDomAttribute("class");
+				String placeholder = element.getDomAttribute("placeholder");
+				
+				// Return the Description the based on the Element Attributes
+				if(isNotEmpty(name)) {
+					return "	 Element with Name: " + name;
+				}else if(isNotEmpty(id)) {
+					return " Element with Id: " + id;
+				}else if(isNotEmpty(text)) {
+					return " Element with Text: " + truncate(text,50);
+				} else if(isNotEmpty(placeholder)) {
+					return " Element with PlaceHolder: " + placeholder;
+				}else if(isNotEmpty(classname)) {
+					return " Element with classname: " + classname;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.error("Unable to describe the Element - " + e.getMessage());
+			}
+			return "Unable to describe the Element ";
+			
+	}
+	
+// Utility method to check a string is empty or not
+	
+	private boolean isNotEmpty(String value) {
+		return value!=null && !value.isEmpty();
+	}
+	
+// Utility Method to truncate the long string
+	
+	private 	String truncate(String value, int MaxLength) {
+		if(value ==null||value.length()<=MaxLength) {
+			return value;}
+		return value.substring(0, MaxLength)+"...";
+	}
+	
 }

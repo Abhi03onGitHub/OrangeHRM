@@ -8,8 +8,8 @@ public class LoggerManager {
 // This method returns the logger instance for the provided class	
 	public static Logger getLogger(Class<?> clazz )
 	{
-		return LogManager.getLogger();
-		
+		return LogManager.getLogger(clazz);
+		 	
 	}
 
 }

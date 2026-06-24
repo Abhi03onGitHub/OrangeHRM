@@ -76,7 +76,7 @@
 					<!--Specify the Location of your testng.xml file-->
 					<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
-					
+					 
 					</configuration>
 				</plugin>
 				<plugin>
