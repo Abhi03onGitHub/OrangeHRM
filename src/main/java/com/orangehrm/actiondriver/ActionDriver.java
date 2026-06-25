@@ -3,6 +3,7 @@ package com.orangehrm.actiondriver;
 import java.time.Duration;
 import java.util.Properties;
 import com.orangehrm.base.BaseClass;
+import com.orangehrm.utilities.ExtentManager;
 import com.orangehrm.utilities.LoggerManager;
 
 import org.openqa.selenium.By;
@@ -32,8 +33,10 @@ public class ActionDriver {
 		try {
 			waitForElementToBeClickable(by);
 			driver.findElement(by).click();
+			ExtentManager.logStep(" Clicked an Element: "+elementDescription);
 		} catch (Exception e) {
 			System.out.println("Unable to Click the Element: " + e.getMessage());
+			ExtentManager.logFailure(BaseClass.getDriver()," Unable to click the element: ", elementDescription+ "_unable to click");
 			logger.error("Unable to Click element");
 		}
 	}
@@ -46,9 +49,11 @@ public class ActionDriver {
 			element.clear();
 			element.sendKeys(value);
 			logger.info("Value Entered on: "+getElementDescription(by)+" " +value);
+			ExtentManager.logStep(" Entered the Text: "+value);
 		} catch (Exception e) {
 			logger.error("Unable to Enter the Text - "+e.getMessage());
-		}
+			ExtentManager.logFailure(BaseClass.getDriver()," Unable to Enter the Text: ","text_not_entered");
+		} 
 	}
 
 // Method to get the Text to the Input Field
@@ -71,9 +76,11 @@ public class ActionDriver {
 			String ActualText = driver.findElement(by).getText();
 			if(ExpectedText.equals(ActualText)) {
 				logger.info("Text is Matching : "+ActualText+" equals "+ExpectedText);
+				ExtentManager.logStepWithScreenshot(BaseClass.getDriver(), " Comapre text ", "Text Verified Successfully!! "+ActualText+" equals "+ExpectedText);
 				return true;
 			} else {
 				logger.info("Text is not Matching : "+ActualText+" is not equals "+ExpectedText);
+				ExtentManager.logFailure(BaseClass.getDriver()," Comapre text ", "Text Comparision Failed "+ActualText+" not equals to "+ExpectedText);
 				return false;
 			}
 		} catch (Exception e) {
@@ -101,11 +108,13 @@ public class ActionDriver {
 		try {
 			waitForElementToBeVisible(by);
 			boolean isDisplayed = driver.findElement(by).isDisplayed();
-			logger.info("Element is getting displayed" +getElementDescription(by));
+			ExtentManager.logStep(" Element is Displayed: ");
+			ExtentManager.logStepWithScreenshot(BaseClass.getDriver(), "Element is Displayed:", "Element is Displayed:"+getElementDescription(by));
 			return driver.findElement(by).isDisplayed();
 			
 		} catch (Exception e) {
 				logger.error("Element is not Displayed : "+e.getMessage());
+				ExtentManager.logFailure(BaseClass.getDriver()," Element is not displayed ","Element is not displayed: " +getElementDescription(by));
 				return false;	
 		}
 		

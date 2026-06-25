@@ -18,6 +18,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import com.orangehrm.actiondriver.ActionDriver;
+import com.orangehrm.utilities.ExtentManager;
 import com.orangehrm.utilities.LoggerManager;
 
 
@@ -42,15 +43,24 @@ public class BaseClass {
 		FileInputStream fis = new FileInputStream("src\\main\\resources\\config.properties");
 		prop.load(fis);
 		logger.info("config.Properties file loaded");
+		
+		// Start the Extent Report
+		ExtentManager.getReporter();
+		
 	}
 
 	@BeforeMethod
-	public void setup() throws IOException {
+	public synchronized void setup() throws IOException {
 		System.out.println("Setting Up the WebDriver for " + this.getClass().getSimpleName());
 		launchBrowser();
 		configureBrowser();
 		staticWait(2);
 		logger.info("Webdriver Initialized and browser maximized");
+		logger.trace(" This is a Trace Message ");
+		logger.error(" This is a Error Message ");
+		logger.debug(" This is a Debug Message ");
+		logger.fatal(" This is a Fatal Message ");
+		logger.warn(" This is a Warn Message ");
 		
 		// Initialize the actionDriver only once
 		/*if(actionDriver== null) {
@@ -68,14 +78,17 @@ public class BaseClass {
 		if (browser.equalsIgnoreCase("chrome")) {
 			//driver = new ChromeDriver();
 			driver.set(new ChromeDriver());
+			ExtentManager.registerDriver(getDriver());
 			logger.info("Chrome Driver Instance is created");
 		} else if (browser.equalsIgnoreCase("firefox")) {
 			//driver = new FirefoxDriver();
 			driver.set(new FirefoxDriver());
+			ExtentManager.registerDriver(getDriver());
 			logger.info("Firefox Driver Instance is created");
 		} else if (browser.equalsIgnoreCase("edge")) {
 			//driver = new EdgeDriver();
 			driver.set(new EdgeDriver());
+			ExtentManager.registerDriver(getDriver());
 			logger.info("Edge Driver Instance is created");
 		} else {
 			throw new IllegalArgumentException("Browser is not supported" + browser);
@@ -112,6 +125,7 @@ public class BaseClass {
 		actionDriver.remove();
 		//driver=null;
 		//actionDriver = null;
+		ExtentManager.endTest();
 	}
 	
 /*	
@@ -153,7 +167,7 @@ public class BaseClass {
 // Driver Setter Method
 		public void setDriver(ThreadLocal<WebDriver> driver) {
 			this.driver = driver;
-		}
+		}	 
 
 //Static Wait for the Pause
 	public void staticWait(int seconds) {		
