@@ -27,7 +27,7 @@ public class LoginPagetest extends BaseClass {
 	@Test	
 	public void verifyValidLogin() {
 		
-		ExtentManager.startTest(" Test Case:- Verify the Valid Login Test");
+		// ExtentManager.startTest(" Test Case:- Verify the Valid Login Test");  -- This has been implemented in Test Listeners
 		System.out.println(" Running testMethod1 on Thread: "+Thread.currentThread().getId());
 		ExtentManager.logStep("Entering the Username and Password");
 		loginpage.login("admin", "admin123");

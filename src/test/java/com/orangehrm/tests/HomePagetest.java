@@ -26,7 +26,7 @@ public class HomePagetest extends BaseClass {
 	
 	@Test
 	public void verifyOrangeHRMLogo() {
-		ExtentManager.startTest(" Test Case:- Verify the OrangeHRM logo");
+		// ExtentManager.startTest(" Test Case:- Verify the OrangeHRM logo"); -- This has been implemented in Test Listeners
 		ExtentManager.logStep("Entering the Username and Password");
 		loginpage.login("admin", "admin123");
 		staticWait(5);

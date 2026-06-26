@@ -45,7 +45,8 @@ public class BaseClass {
 		logger.info("config.Properties file loaded");
 		
 		// Start the Extent Report
-		ExtentManager.getReporter();
+		// ExtentManager.getReporter();   		-- This is implemented in Test Listeners
+		
 		
 	}
 
@@ -125,7 +126,7 @@ public class BaseClass {
 		actionDriver.remove();
 		//driver=null;
 		//actionDriver = null;
-		ExtentManager.endTest();
+		// ExtentManager.endTest(); ---- This has been implemented in itestLiteners
 	}
 	
 /*	

@@ -75,11 +75,11 @@ public class ActionDriver {
 			waitForElementToBeVisible(by);
 			String ActualText = driver.findElement(by).getText();
 			if(ExpectedText.equals(ActualText)) {
-				logger.info("Text is Matching : "+ActualText+" equals "+ExpectedText);
+				logger.info("Text Comparision Passed : "+ActualText+" equals "+ExpectedText);
 				ExtentManager.logStepWithScreenshot(BaseClass.getDriver(), " Comapre text ", "Text Verified Successfully!! "+ActualText+" equals "+ExpectedText);
 				return true;
 			} else {
-				logger.info("Text is not Matching : "+ActualText+" is not equals "+ExpectedText);
+				logger.info("Text Comparision Failed : "+ActualText+" is not equals "+ExpectedText);
 				ExtentManager.logFailure(BaseClass.getDriver()," Comapre text ", "Text Comparision Failed "+ActualText+" not equals to "+ExpectedText);
 				return false;
 			}
